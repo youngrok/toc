@@ -1,6 +1,7 @@
 from xml.dom.minidom import Element, Text
 import xpath
 import html5lib
+import re
 
 def table_of_contents(label_node, fragment=False):
     index = [0, 0, 0, 0, 0, 0]
@@ -10,7 +11,6 @@ def table_of_contents(label_node, fragment=False):
 
     doc = html5lib.parse(label_node, treebuilder='dom', namespaceHTMLElements=False)
     for header in xpath.find('//h1|//h2|//h3|//h4|//h5|//h6', doc):
-        header_text = innerText(header)
         nextdepth = int(header.nodeName[1])
 
         if nextdepth > depth:
@@ -30,7 +30,7 @@ def table_of_contents(label_node, fragment=False):
         li = Element('li')
         a = Element('a')
         a.setAttribute('href', '#header-%s' % label)
-        a.appendChild(doc.createTextNode(header_text))
+        a.appendChild(doc.createTextNode(innerText(header)))
         li.appendChild(a)
         ol.appendChild(li)
         
@@ -55,5 +55,7 @@ def table_of_contents(label_node, fragment=False):
 def innerHTML(node):
     return ''.join([child.toxml() for child in node.childNodes])
 
+tag_pattern = re.compile('<[^<]+?>')
+
 def innerText(node):
-    return ''.join([text.nodeValue for text in xpath.find('text()', node)])
+    return re.sub(tag_pattern, '', innerHTML(node))
