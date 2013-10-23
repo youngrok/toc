@@ -46,7 +46,7 @@ def table_of_contents(label_node, fragment=False):
         ol = filter(lambda node: node.nodeName == 'ol', ol.childNodes)[0]
     ol.setAttribute('class', 'toc')
 
-    return html5lib.serialize(ol, 'dom'), html5lib.serialize(doc, 'dom')    
+    return html5lib.serialize(ol, 'dom', quote_attr_values=True), html5lib.serialize(doc, 'dom', quote_attr_values=True)
         
 
 def innerHTML(node):
