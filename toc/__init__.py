@@ -45,11 +45,8 @@ def table_of_contents(label_node, fragment=False):
     while not filter(lambda node: node.nodeName == 'li', ol.childNodes) and filter(lambda node: node.nodeName == 'ol', ol.childNodes):
         ol = filter(lambda node: node.nodeName == 'ol', ol.childNodes)[0]
     ol.setAttribute('class', 'toc')
-    
-    if fragment:
-        return ol.toxml(), innerHTML(doc.getElementsByTagName('body')[0])
-    else:
-        return ol.toxml(), doc.toxml()
+
+    return html5lib.serialize(ol, 'dom'), html5lib.serialize(doc, 'dom')    
         
 
 def innerHTML(node):
