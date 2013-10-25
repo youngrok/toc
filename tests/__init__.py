@@ -84,7 +84,7 @@ class TocTest(TestCase):
     <li>스타트업 개발 맞춤교육</li>
 </ul>
 '''        
-        toc, body = table_of_contents(html, fragment=True)
+        toc, body = table_of_contents(html)
 
         toc_dom = html5lib.parse(toc, treebuilder='dom', namespaceHTMLElements=False)
 

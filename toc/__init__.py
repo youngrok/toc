@@ -3,24 +3,26 @@ import xpath
 import html5lib
 import re
 
-def table_of_contents(label_node, fragment=False):
+def table_of_contents(html, url=''):
     index = [0, 0, 0, 0, 0, 0]
     depth = 0
     
     toc = ol = Element('ol')
 
-    doc = html5lib.parse(label_node, treebuilder='dom', namespaceHTMLElements=False)
+    doc = html5lib.parse(html, treebuilder='dom', namespaceHTMLElements=False)
     for header in xpath.find('//h1|//h2|//h3|//h4|//h5|//h6', doc):
         nextdepth = int(header.nodeName[1])
 
         if nextdepth > depth:
             for i in range(nextdepth, 6):
                 index[i - 1] = 0
-            next_ol = Element('ol')
-            ol.appendChild(next_ol)
-            ol = next_ol
+                
+            for i in range(depth, nextdepth):
+                next_ol = Element('ol')
+                ol.appendChild(next_ol)
+                ol = next_ol
         elif nextdepth < depth:
-            ol = ol.parentNode
+            for i in range(nextdepth, depth): ol = ol.parentNode
             
         depth = nextdepth
             
@@ -29,7 +31,7 @@ def table_of_contents(label_node, fragment=False):
 
         li = Element('li')
         a = Element('a')
-        a.setAttribute('href', '#header-%s' % label)
+        a.setAttribute('href', '%s#header-%s' % (url, label))
         a.appendChild(doc.createTextNode(innerText(header)))
         li.appendChild(a)
         ol.appendChild(li)
