@@ -2,9 +2,10 @@
 **toc** is HTML table of contents generator. It parses html, generate table of contents, and put anchors into original html.
 
 ## usage
-	toc, body = table_of_contents(html, fragment=True)
+	toc_html, body = table_of_contents(html)
+	toc_html, body = table_of_contents(html, url='http://somedomain.com/somepath')
 
-* `toc`: table of contents 
+* `toc_html`: table of contents 
 * `body`: modified html
 
 ## install
