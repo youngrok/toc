@@ -11,7 +11,7 @@ setup(name='toc',
       author_email='pak.youngrok@gmail.com',
       keywords= 'toc table contents html',
       url='https://github.com/youngrok/toc',
-      version='0.0.6',
+      version='0.0.7',
       packages=['toc',
                 ],
       classifiers = [

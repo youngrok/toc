@@ -3,7 +3,7 @@ import xpath
 import html5lib
 import re
 
-def table_of_contents(html, url=''):
+def table_of_contents(html, url='', anchor_type='stacked-number'):
     index = [0, 0, 0, 0, 0, 0]
     depth = 0
     
@@ -37,11 +37,20 @@ def table_of_contents(html, url=''):
         ol.appendChild(li)
         
         header.setAttribute('id', 'header-' + label)
-        anchor = Element('a')
-        anchor.setAttribute('href', '#header-%s' % label)
-        anchor.setAttribute('class', 'toc-anchor')
-        anchor.appendChild(doc.createTextNode(label))
-        header.insertBefore(anchor, header.firstChild)
+        
+        if anchor_type == 'following-marker':
+            anchor = Element('a')
+            anchor.setAttribute('href', '#header-%s' % label)
+            anchor.setAttribute('class', 'toc-anchor')
+            anchor.appendChild(doc.createTextNode('#'))
+            header.insertAfter(anchor, header.lastChild)
+        else:
+            anchor = Element('a')
+            anchor.setAttribute('href', '#header-%s' % label)
+            anchor.setAttribute('class', 'toc-anchor')
+            anchor.appendChild(doc.createTextNode(label))
+            header.insertBefore(anchor, header.firstChild)
+        
 
     ol = toc
     while not filter(lambda node: node.nodeName == 'li', ol.childNodes) and filter(lambda node: node.nodeName == 'ol', ol.childNodes):

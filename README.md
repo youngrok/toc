@@ -4,7 +4,11 @@
 ## usage
 	toc_html, body = table_of_contents(html)
 	toc_html, body = table_of_contents(html, url='http://somedomain.com/somepath')
+	toc_html, body = table_of_contents(html, anchor_type='following-marker')
 
+* anchor_type
+  * following-marker : Add anchor tag to the end of heading tags. Anchor text is `#`
+  * stacked-number : Add anchor tag to the begining of heading tags. Anchor text is like `1.2.3`.
 * `toc_html`: table of contents 
 * `body`: modified html
 
