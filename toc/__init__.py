@@ -43,7 +43,7 @@ def table_of_contents(html, url='', anchor_type='stacked-number'):
             anchor.setAttribute('href', '#header-%s' % label)
             anchor.setAttribute('class', 'toc-anchor')
             anchor.appendChild(doc.createTextNode('#'))
-            header.insertAfter(anchor, header.lastChild)
+            header.appendChild(anchor)
         else:
             anchor = Element('a')
             anchor.setAttribute('href', '#header-%s' % label)
