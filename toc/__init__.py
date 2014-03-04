@@ -27,7 +27,7 @@ def table_of_contents(html, url='', anchor_type='stacked-number'):
         depth = nextdepth
             
         index[depth - 1] += 1
-        label = '.'.join([str(index[d]) for d in range(0, depth) if index[d]])
+        label = '-'.join([str(index[d]) for d in range(0, depth) if index[d]])
 
         li = Element('li')
         a = Element('a')
