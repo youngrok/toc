@@ -92,7 +92,6 @@ class TocTest(TestCase):
         self.assertEquals('#header-1-2', ol.childNodes[1].childNodes[2].firstChild.getAttribute('href'))
 
         body_dom = html5lib.parse(body, treebuilder='dom')
-        print(body_dom.getElementsByTagName('h2')[1].childNodes[1])
         self.assertEquals('iOS 개발', body_dom.getElementsByTagName('h2')[1].childNodes[1].nodeValue)
         self.assertEquals('1-2-3', body_dom.getElementsByTagName('h3')[3].firstChild.firstChild.nodeValue)
 

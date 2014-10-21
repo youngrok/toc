@@ -15,7 +15,6 @@ def table_of_contents(html, url='', anchor_type='stacked-number'):
 
     toc_doc = getDOMImplementation().createDocument(None, 'ol', None)
     toc = ol = toc_doc.documentElement
-    print(html5lib.serialize(ol, 'dom', quote_attr_values=True))
 
     doc = html5lib.parse(html, treebuilder='dom', namespaceHTMLElements=False)
     for header in traverse_headings(doc.documentElement):
@@ -65,7 +64,6 @@ def table_of_contents(html, url='', anchor_type='stacked-number'):
         ol = list(filter(lambda node: node.nodeName == 'ol', ol.childNodes))[0]
     ol.setAttribute('class', 'toc')
 
-    print(html5lib.serialize(ol, 'dom', quote_attr_values=True))
     return html5lib.serialize(ol, 'dom', quote_attr_values=True), html5lib.serialize(doc, 'dom', quote_attr_values=True)
         
 
