@@ -1,16 +1,24 @@
-from xml.dom.minidom import Element, Text
-import xpath
+from functools import reduce
+import operator
+from xml.dom.minidom import Element, Text, getDOMImplementation
 import html5lib
 import re
+
+
+# def traverse_headings(doc):
+#     return reduce(operator.add, map(doc.getElementsByTagName, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']))
+
 
 def table_of_contents(html, url='', anchor_type='stacked-number'):
     index = [0, 0, 0, 0, 0, 0]
     depth = 0
-    
-    toc = ol = Element('ol')
+
+    toc_doc = getDOMImplementation().createDocument(None, 'ol', None)
+    toc = ol = toc_doc.documentElement
+    print(html5lib.serialize(ol, 'dom', quote_attr_values=True))
 
     doc = html5lib.parse(html, treebuilder='dom', namespaceHTMLElements=False)
-    for header in xpath.find('//h1|//h2|//h3|//h4|//h5|//h6', doc):
+    for header in traverse_headings(doc.documentElement):
         nextdepth = int(header.nodeName[1])
 
         if nextdepth > depth:
@@ -18,7 +26,7 @@ def table_of_contents(html, url='', anchor_type='stacked-number'):
                 index[i - 1] = 0
                 
             for i in range(depth, nextdepth):
-                next_ol = Element('ol')
+                next_ol = toc_doc.createElement('ol')
                 ol.appendChild(next_ol)
                 ol = next_ol
         elif nextdepth < depth:
@@ -29,8 +37,8 @@ def table_of_contents(html, url='', anchor_type='stacked-number'):
         index[depth - 1] += 1
         label = '-'.join([str(index[d]) for d in range(0, depth) if index[d]])
 
-        li = Element('li')
-        a = Element('a')
+        li = toc_doc.createElement('li')
+        a = toc_doc.createElement('a')
         a.setAttribute('href', '%s#header-%s' % (url, label))
         a.appendChild(doc.createTextNode(innerText(header)))
         li.appendChild(a)
@@ -39,13 +47,13 @@ def table_of_contents(html, url='', anchor_type='stacked-number'):
         header.setAttribute('id', 'header-' + label)
         
         if anchor_type == 'following-marker':
-            anchor = Element('a')
+            anchor = toc_doc.createElement('a')
             anchor.setAttribute('href', '#header-%s' % label)
             anchor.setAttribute('class', 'toc-anchor')
             anchor.appendChild(doc.createTextNode('#'))
             header.appendChild(anchor)
         else:
-            anchor = Element('a')
+            anchor = toc_doc.createElement('a')
             anchor.setAttribute('href', '#header-%s' % label)
             anchor.setAttribute('class', 'toc-anchor')
             anchor.appendChild(doc.createTextNode(label))
@@ -53,10 +61,11 @@ def table_of_contents(html, url='', anchor_type='stacked-number'):
         
 
     ol = toc
-    while not filter(lambda node: node.nodeName == 'li', ol.childNodes) and filter(lambda node: node.nodeName == 'ol', ol.childNodes):
-        ol = filter(lambda node: node.nodeName == 'ol', ol.childNodes)[0]
+    while not list(filter(lambda node: node.nodeName == 'li', ol.childNodes)) and list(filter(lambda node: node.nodeName == 'ol', ol.childNodes)):
+        ol = list(filter(lambda node: node.nodeName == 'ol', ol.childNodes))[0]
     ol.setAttribute('class', 'toc')
 
+    print(html5lib.serialize(ol, 'dom', quote_attr_values=True))
     return html5lib.serialize(ol, 'dom', quote_attr_values=True), html5lib.serialize(doc, 'dom', quote_attr_values=True)
         
 
@@ -67,3 +76,16 @@ tag_pattern = re.compile('<[^<]+?>')
 
 def innerText(node):
     return re.sub(tag_pattern, '', innerHTML(node))
+
+heading_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+
+def traverse_headings(element):
+    headings = []
+
+    for child in element.childNodes:
+        if child.nodeName in heading_tags:
+            headings.append(child)
+
+        headings.extend(traverse_headings(child))
+
+    return headings

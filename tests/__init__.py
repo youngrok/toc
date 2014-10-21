@@ -1,9 +1,8 @@
 # coding: utf8
+from __future__ import unicode_literals
 from unittest import TestCase
 from toc import table_of_contents
-import os
 import html5lib
-import xpath
 
 class TocTest(TestCase):
     def test_generate(self):
@@ -87,14 +86,15 @@ class TocTest(TestCase):
         toc, body = table_of_contents(html)
 
         toc_dom = html5lib.parse(toc, treebuilder='dom', namespaceHTMLElements=False)
+        ol = toc_dom.getElementsByTagName('ol')[0]
+        self.assertEquals('#header-1', ol.firstChild.firstChild.getAttribute('href'))
+        self.assertEquals('iOS 개발', ol.childNodes[1].childNodes[2].firstChild.firstChild.nodeValue)
+        self.assertEquals('#header-1-2', ol.childNodes[1].childNodes[2].firstChild.getAttribute('href'))
 
-        self.assertEquals('#header-1', xpath.find('//ol[@class="toc"]/li[1]/a', toc_dom)[0].getAttribute('href'))
-        self.assertEquals('안드로이드 개발', xpath.find('//ol[@class="toc"]/ol/ol[2]/li[3]/a', toc_dom)[0].firstChild.nodeValue)
-        self.assertEquals('#header-1.2.3', xpath.find('//ol[@class="toc"]/ol/ol[2]/li[3]/a', toc_dom)[0].getAttribute('href'))
+        body_dom = html5lib.parse(body, treebuilder='dom')
+        print(body_dom.getElementsByTagName('h2')[1].childNodes[1])
+        self.assertEquals('iOS 개발', body_dom.getElementsByTagName('h2')[1].childNodes[1].nodeValue)
+        self.assertEquals('1-2-3', body_dom.getElementsByTagName('h3')[3].firstChild.firstChild.nodeValue)
 
-        body_dom = html5lib.parse(body, treebuilder='dom', namespaceHTMLElements=False)
-        self.assertEquals('안드로이드 개발', xpath.find('//h3[@id="header-1.2.3"]/text()', body_dom)[0].nodeValue)
-        self.assertEquals('1.2.3', xpath.find('//h3[@id="header-1.2.3"]/a', body_dom)[0].firstChild.nodeValue)
-            
             
             

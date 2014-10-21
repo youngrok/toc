@@ -2,7 +2,6 @@ from setuptools import setup
 
 install_requires = [
     'html5lib',
-    'py-dom-xpath',
     ]
 
 setup(name='toc',
@@ -11,7 +10,7 @@ setup(name='toc',
       author_email='pak.youngrok@gmail.com',
       keywords= 'toc table contents html',
       url='https://github.com/youngrok/toc',
-      version='0.0.9',
+      version='0.0.10',
       packages=['toc',
                 ],
       classifiers = [
