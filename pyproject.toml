@@ -1,0 +1,15 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "toc"
+authors = [{name = "Pak Youngrok", email = "pak.youngrok@gmail.com"}]
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: Apache Software License"]
+dynamic = ["version", "description"]
+dependencies = [
+    "html5lib",
+]
+[project.urls]
+Home = "https://github.com/finecodekr/opentaxkr"

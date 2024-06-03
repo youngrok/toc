@@ -1,8 +1,13 @@
-from functools import reduce
-import operator
-from xml.dom.minidom import Element, Text, getDOMImplementation
-import html5lib
+"""
+Table of contents generator for html
+"""
 import re
+from xml.dom.minidom import getDOMImplementation
+
+import html5lib
+
+
+__version__ = '0.0.12'
 
 
 # def traverse_headings(doc):
@@ -64,7 +69,8 @@ def table_of_contents(html, url='', anchor_type='stacked-number'):
         ol = list(filter(lambda node: node.nodeName == 'ol', ol.childNodes))[0]
     ol.setAttribute('class', 'toc')
 
-    return html5lib.serialize(ol, 'dom', quote_attr_values=True), html5lib.serialize(doc, 'dom', quote_attr_values=True)
+    return (html5lib.serialize(ol, 'dom', quote_attr_values='spec'),
+            html5lib.serialize(doc, 'dom', quote_attr_values='spec'))
         
 
 def innerHTML(node):
