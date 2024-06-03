@@ -7,14 +7,14 @@ from xml.dom.minidom import getDOMImplementation
 import html5lib
 
 
-__version__ = '0.0.12'
+__version__ = '0.0.13'
 
 
 # def traverse_headings(doc):
 #     return reduce(operator.add, map(doc.getElementsByTagName, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']))
 
 
-def table_of_contents(html, url='', anchor_type='stacked-number'):
+def table_of_contents(html, url='', anchor_type='stacked-number', quote_attr_values='spec'):
     index = [0, 0, 0, 0, 0, 0]
     depth = 0
 
@@ -69,8 +69,8 @@ def table_of_contents(html, url='', anchor_type='stacked-number'):
         ol = list(filter(lambda node: node.nodeName == 'ol', ol.childNodes))[0]
     ol.setAttribute('class', 'toc')
 
-    return (html5lib.serialize(ol, 'dom', quote_attr_values='spec'),
-            html5lib.serialize(doc, 'dom', quote_attr_values='spec'))
+    return (html5lib.serialize(ol, 'dom', quote_attr_values=quote_attr_values),
+            html5lib.serialize(doc, 'dom', quote_attr_values=quote_attr_values))
         
 
 def innerHTML(node):
