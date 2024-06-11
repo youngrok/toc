@@ -7,7 +7,7 @@ from xml.dom.minidom import getDOMImplementation
 import html5lib
 
 
-__version__ = '0.0.13'
+__version__ = '0.0.14'
 
 
 # def traverse_headings(doc):

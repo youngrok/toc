@@ -12,4 +12,4 @@ dependencies = [
     "html5lib",
 ]
 [project.urls]
-Home = "https://github.com/finecodekr/opentaxkr"
+Home = "https://github.com/youngrok/toc"
